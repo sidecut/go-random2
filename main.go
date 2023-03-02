@@ -28,10 +28,8 @@ func main() {
 	switch {
 	case coin && n == 0:
 		coins := []string{"HEADS", "tails"}
-		rand.Shuffle(len(coins), func(i, j int) {
-			coins[i], coins[j] = coins[j], coins[i]
-		})
-		fmt.Println(coins[0])
+		r := rand.Intn(2)
+		fmt.Println(coins[r])
 
 	case !coin && n != 0:
 		r := rand.Intn(n-1) + 1
