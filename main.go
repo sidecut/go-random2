@@ -12,7 +12,7 @@ var (
 )
 
 func init() {
-	flag.IntVar(&n, "n", 0, "Defines [1, n] range.\nn must be > 0")
+	flag.IntVar(&n, "n", 0, "Defines [1, n] range.\nn must be > 0.")
 }
 
 func main() {
