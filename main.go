@@ -24,6 +24,7 @@ func init() {
 
 func main() {
 	flag.Parse()
+
 	switch {
 	case coin && n == 0:
 		coins := []string{"heads", "tails"}
