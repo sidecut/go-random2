@@ -27,7 +27,7 @@ func main() {
 
 	switch {
 	case coin && n == 0:
-		coins := []string{"heads", "tails"}
+		coins := []string{"HEADS", "tails"}
 		rand.Shuffle(len(coins), func(i, j int) {
 			coins[i], coins[j] = coins[j], coins[i]
 		})
