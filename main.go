@@ -81,6 +81,12 @@ func main() {
 		for s.Scan() {
 			options = append(options, s.Text())
 		}
+		if len(options) == 0 {
+			fmt.Fprintln(os.Stderr, "Warning: no options specified")
+		}
+		if len(options) == 1 {
+			fmt.Fprintln(os.Stderr, "Warning: only one option specified.  Did you mean -t?")
+		}
 		if shuffle {
 			setOrValidateRepeat(options)
 		}
