@@ -13,6 +13,8 @@ var (
 	repeat uint
 )
 
+var coins = []string{"HEADS", "tails"}
+
 func init() {
 	flag.IntVar(&n, "n", 0, "Defines [1, n] range; must be > 0")
 	flag.BoolVar(&coin, "c", false, "Coin toss")
@@ -34,21 +36,27 @@ func main() {
 		os.Exit(1)
 	}
 
+	var generateFunc func() any
+
 	switch {
 	case coin && n == 0:
-		for i := 0; i < int(repeat); i++ {
-			coins := []string{"HEADS", "tails"}
+		generateFunc = func() any {
 			r := rand.Intn(2)
-			fmt.Println(coins[r])
+			return coins[r]
 		}
 
 	case !coin && n != 0:
-		for i := 0; i < int(repeat); i++ {
+		generateFunc = func() any {
 			r := rand.Intn(n-1) + 1
-			fmt.Println(r)
+			return r
 		}
+
 	default:
 		flag.Usage()
 		os.Exit(1)
+	}
+
+	for i := 0; i < int(repeat); i++ {
+		fmt.Println(generateFunc())
 	}
 }
