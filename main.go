@@ -17,6 +17,7 @@ var (
 	lines     bool
 	tokens    bool
 	shuffle   bool
+	newLine   bool
 )
 
 var coins = []string{"HEADS", "tails"}
@@ -28,6 +29,7 @@ func init() {
 	flag.BoolVar(&tokens, "t", false, "Input options as tokens from stdin")
 	flag.UintVar(&repeat, "r", 1, "Repeat count; must be > 0")
 	flag.BoolVar(&shuffle, "s", false, "Shuffle the input")
+	flag.BoolVar(&newLine, "nl", false, "Newline between items in the output")
 
 	oldUsage := flag.Usage
 	flag.Usage = func() {
@@ -126,7 +128,13 @@ func main() {
 		}
 	}
 
-	fmt.Println(results...)
+	if newLine {
+		for _, result := range results {
+			fmt.Println(result)
+		}
+	} else {
+		fmt.Println(results...)
+	}
 }
 
 func setOrValidateRepeat(options []string) {
