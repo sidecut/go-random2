@@ -29,7 +29,7 @@ var coins = []string{"HEADS", "tails"}
 func init() {
 	flag.IntVar(&n, "n", 0, "Defines [1, n] range; must be > 0")
 	flag.BoolVar(&coin, "c", false, "Coin toss")
-	flag.BoolVar(&lines, "i", false, "Input options as lines from stdin")
+	flag.BoolVar(&lines, "l", false, "Input options as lines from stdin")
 	flag.BoolVar(&tokens, "t", false, "Input options as tokens from stdin")
 	flag.UintVar(&repeat, "r", 1, "Repeat count; must be > 0")
 	flag.BoolVar(&shuffle, "shuffle", false, shuffleUsage)
@@ -39,7 +39,7 @@ func init() {
 	oldUsage := flag.Usage
 	flag.Usage = func() {
 		oldUsage()
-		fmt.Fprintln(flag.CommandLine.Output(), "\nNOTE: -n, -i, -t, and -c are mutually exclusive.")
+		fmt.Fprintln(flag.CommandLine.Output(), "\nNOTE: -n, -l, -t, and -c are mutually exclusive.")
 	}
 }
 
