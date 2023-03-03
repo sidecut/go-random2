@@ -56,7 +56,10 @@ func main() {
 		os.Exit(1)
 	}
 
+	results := []any{}
 	for i := 0; i < int(repeat); i++ {
-		fmt.Println(generateFunc())
+		results = append(results, generateFunc())
 	}
+
+	fmt.Println(results...)
 }
