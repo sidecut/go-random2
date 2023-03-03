@@ -47,7 +47,7 @@ func main() {
 
 	case !coin && n != 0:
 		generateFunc = func() any {
-			r := rand.Intn(n-1) + 1
+			r := rand.Intn(n) + 1
 			return r
 		}
 
