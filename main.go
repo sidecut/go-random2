@@ -20,6 +20,10 @@ var (
 	newLine   bool
 )
 
+const (
+	shuffleUsage = "Shuffle the input"
+)
+
 var coins = []string{"HEADS", "tails"}
 
 func init() {
@@ -28,7 +32,8 @@ func init() {
 	flag.BoolVar(&lines, "i", false, "Input options as lines from stdin")
 	flag.BoolVar(&tokens, "t", false, "Input options as tokens from stdin")
 	flag.UintVar(&repeat, "r", 1, "Repeat count; must be > 0")
-	flag.BoolVar(&shuffle, "s", false, "Shuffle the input")
+	flag.BoolVar(&shuffle, "shuffle", false, shuffleUsage)
+	flag.BoolVar(&shuffle, "s", false, shuffleUsage+" (shorthand)")
 	flag.BoolVar(&newLine, "nl", false, "Newline between items in the output")
 
 	oldUsage := flag.Usage
