@@ -127,6 +127,9 @@ func main() {
 		ctx, cancelFunc := context.WithTimeout(context.Background(), time.Second)
 		wg.Add(1)
 		go func(ctx context.Context, cancelFunc context.CancelFunc) {
+			defer wg.Done()
+			defer cancelFunc()
+
 			// Results cannot repeat
 			resultsKeys := make(map[any]interface{})
 			for len(resultsKeys) < int(repeat) {
@@ -140,13 +143,9 @@ func main() {
 					if ctx.Err().Error() == "context deadline exceeded" {
 						fmt.Fprintln(os.Stderr, "Warning: timeout exceeded.  The repeat count may be too high.")
 					}
-					cancelFunc()
-					wg.Done()
-					return
+					break
 				}
 			}
-			cancelFunc()
-			wg.Done()
 		}(ctx, cancelFunc)
 		wg.Wait()
 
