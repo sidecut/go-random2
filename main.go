@@ -141,7 +141,7 @@ func main() {
 
 				if ctx.Err() != nil {
 					if ctx.Err().Error() == "context deadline exceeded" {
-						fmt.Fprintln(os.Stderr, "Warning: timeout exceeded.  The repeat count may be too high.")
+						fmt.Fprintln(os.Stderr, "Warning: timeout exceeded when generating results.  The repeat count may be too high.")
 					}
 					break
 				}
