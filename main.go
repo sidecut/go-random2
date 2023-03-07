@@ -2,11 +2,14 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"flag"
 	"fmt"
 	"math/rand"
 	"os"
 	"strings"
+	"sync"
+	"time"
 )
 
 var (
@@ -120,15 +123,33 @@ func main() {
 	// Produce and output results
 	results := []any{}
 	if shuffle {
-		// Results cannot repeat
-		resultsKeys := make(map[any]interface{})
-		for len(resultsKeys) < int(repeat) {
-			r := generateFunc()
-			if _, found := resultsKeys[r]; !found {
-				results = append(results, r)
-				resultsKeys[r] = nil
+		var wg sync.WaitGroup
+		ctx, cancelFunc := context.WithTimeout(context.Background(), time.Second)
+		wg.Add(1)
+		go func(ctx context.Context, cancelFunc context.CancelFunc) {
+			// Results cannot repeat
+			resultsKeys := make(map[any]interface{})
+			for len(resultsKeys) < int(repeat) {
+				r := generateFunc()
+				if _, found := resultsKeys[r]; !found {
+					results = append(results, r)
+					resultsKeys[r] = nil
+				}
+
+				if ctx.Err() != nil {
+					if ctx.Err().Error() == "context deadline exceeded" {
+						fmt.Fprintln(os.Stderr, "Warning: timeout exceeded.  The repeat count may be too high.")
+					}
+					cancelFunc()
+					wg.Done()
+					return
+				}
 			}
-		}
+			cancelFunc()
+			wg.Done()
+		}(ctx, cancelFunc)
+		wg.Wait()
+
 		rand.Shuffle(len(results), func(i, j int) {
 			results[i], results[j] = results[j], results[i]
 		})
