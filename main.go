@@ -41,6 +41,7 @@ func init() {
 	flag.BoolVar(&shuffle, "s", false, shuffleUsage+" (shorthand)")
 	flag.BoolVar(&newLine, "nl", false, "Newline between items in the output")
 	flag.BoolVar(&zero, "0", false, "\\0 delimiter in the output, similar to xargs -0 (shorthand)")
+	flag.BoolVar(&zero, "null", false, "\\0 delimiter in the output, similar to xargs -0")
 	flag.BoolVar(&comma, "d", false, "Comma delimiter in the output, similar to xargs -d, (shorthand)")
 
 	oldUsage := flag.Usage
