@@ -22,6 +22,7 @@ var (
 	shuffle   bool
 	newLine   bool
 	zero      bool
+	comma     bool
 )
 
 const (
@@ -40,11 +41,13 @@ func init() {
 	flag.BoolVar(&shuffle, "s", false, shuffleUsage+" (shorthand)")
 	flag.BoolVar(&newLine, "nl", false, "Newline between items in the output")
 	flag.BoolVar(&zero, "0", false, "\\0 delimiter in the output, similar to xargs -0 (shorthand)")
+	flag.BoolVar(&comma, "d", false, "Comma delimiter in the output, similar to xargs -d, (shorthand)")
 
 	oldUsage := flag.Usage
 	flag.Usage = func() {
 		oldUsage()
 		fmt.Fprintln(flag.CommandLine.Output(), "\nNOTE: -n, -l, -t, and -c are mutually exclusive.")
+		fmt.Fprintln(flag.CommandLine.Output(), "NOTE: -nl, -0, and -d are mutually exclusive.")
 	}
 }
 
@@ -161,16 +164,26 @@ func main() {
 		}
 	}
 
-	if newLine {
+	switch {
+	case newLine && !comma && !zero:
 		for _, result := range results {
 			fmt.Println(result)
 		}
-	} else if zero {
+	case zero && !comma && !newLine:
 		for _, result := range results {
 			fmt.Printf("%v\x00", result)
 		}
-	} else {
+	case comma && !newLine && !zero:
+		for _, result := range results {
+			fmt.Printf("%v,", result)
+		}
+
+	case !comma && !newLine && !zero:
 		fmt.Println(results...)
+
+	default:
+		flag.Usage()
+		os.Exit(1)
 	}
 }
 
