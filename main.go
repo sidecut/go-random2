@@ -21,6 +21,7 @@ var (
 	tokens    bool
 	shuffle   bool
 	newLine   bool
+	zero      bool
 )
 
 const (
@@ -38,6 +39,7 @@ func init() {
 	flag.BoolVar(&shuffle, "shuffle", false, shuffleUsage)
 	flag.BoolVar(&shuffle, "s", false, shuffleUsage+" (shorthand)")
 	flag.BoolVar(&newLine, "nl", false, "Newline between items in the output")
+	flag.BoolVar(&zero, "0", false, "\\0 delimiter in the output, similar to xargs -0 (shorthand)")
 
 	oldUsage := flag.Usage
 	flag.Usage = func() {
@@ -162,6 +164,10 @@ func main() {
 	if newLine {
 		for _, result := range results {
 			fmt.Println(result)
+		}
+	} else if zero {
+		for _, result := range results {
+			fmt.Printf("%v\x00", result)
 		}
 	} else {
 		fmt.Println(results...)
