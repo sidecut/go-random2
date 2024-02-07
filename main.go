@@ -5,7 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"os"
 	"strings"
 	"sync"
@@ -74,13 +74,13 @@ func main() {
 	switch {
 	case coin && n == 0 && !lines && !tokens:
 		generateFunc = func() any {
-			r := rand.Intn(2)
+			r := rand.IntN(2)
 			return coins[r]
 		}
 
 	case !coin && n != 0 && !lines && !tokens:
 		generateFunc = func() any {
-			r := rand.Intn(n) + 1
+			r := rand.IntN(n) + 1
 			return r
 		}
 
@@ -101,7 +101,7 @@ func main() {
 		}
 
 		generateFunc = func() any {
-			r := rand.Intn(len(options))
+			r := rand.IntN(len(options))
 			return options[r]
 		}
 
@@ -117,7 +117,7 @@ func main() {
 		}
 
 		generateFunc = func() any {
-			r := rand.Intn(len(options))
+			r := rand.IntN(len(options))
 			return options[r]
 		}
 
