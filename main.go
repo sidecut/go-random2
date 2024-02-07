@@ -23,6 +23,7 @@ var (
 	newLine   bool
 	zero      bool
 	comma     bool
+	seed      uint
 )
 
 const (
@@ -43,6 +44,7 @@ func init() {
 	flag.BoolVar(&zero, "0", false, "\\0 delimiter in the output, similar to xargs -0 (shorthand)")
 	flag.BoolVar(&zero, "null", false, "\\0 delimiter in the output, similar to xargs -0")
 	flag.BoolVar(&comma, "d", false, "Comma delimiter in the output, similar to xargs -d, (shorthand)")
+	flag.UintVar(&seed, "seed", 0, "Seed for the random number generator")
 
 	oldUsage := flag.Usage
 	flag.Usage = func() {
@@ -66,6 +68,10 @@ func main() {
 		fmt.Fprintln(os.Stderr, "-r argument must be > 0")
 		flag.Usage()
 		os.Exit(1)
+	}
+
+	if seed != 0 {
+		rand.Seed(int64(seed))
 	}
 
 	// Create appropriate generator
