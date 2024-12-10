@@ -4,7 +4,7 @@ import Foundation
 struct CommandLineOptions {
     var n: Int = 0
     var coin: Bool = false
-    var repeat: UInt = 1
+    var `repeat`: UInt = 1
     var repeatSet: Bool = false
     var lines: Bool = false
     var tokens: Bool = false
@@ -20,7 +20,7 @@ let coins = ["HEADS", "tails"]
 func parseArguments() -> CommandLineOptions {
     var options = CommandLineOptions()
     let arguments = CommandLine.arguments
-    
+
     var index = 1
     while index < arguments.count {
         let arg = arguments[index]
@@ -55,7 +55,7 @@ func parseArguments() -> CommandLineOptions {
         }
         index += 1
     }
-    
+
     return options
 }
 
@@ -85,30 +85,31 @@ func generateValue(options: CommandLineOptions) -> Any {
 
 func main() {
     let options = parseArguments()
-    
+
     // Validate options
     if options.repeat < 1 && !options.shuffle {
-        print("Error: -r argument must be > 0", to: .standardError)
+        FileHandle.standardError.write("Error: -r argument must be > 0\n".data(using: .utf8)!)
         exit(1)
     }
-    
+
     // Generate results
     var results: [Any] = []
-    
+
     if options.shuffle {
         var uniqueResults = Set<String>()
-        let timeout = Date().addingTimeInterval(1) // 1 second timeout
-        
+        let timeout = Date().addingTimeInterval(1)  // 1 second timeout
+
         while uniqueResults.count < Int(options.repeat) {
             if Date() > timeout {
-                print("Warning: timeout exceeded when generating results. The repeat count may be too high.", to: .standardError)
+                FileHandle.standardError.write(
+                    "Error: timeout exceeded when generating results.\n".data(using: .utf8)!)
                 break
             }
-            
+
             let value = String(describing: generateValue(options: options))
             uniqueResults.insert(value)
         }
-        
+
         results = Array(uniqueResults)
         results.shuffle()
     } else {
@@ -116,7 +117,7 @@ func main() {
             results.append(generateValue(options: options))
         }
     }
-    
+
     // Output results
     if options.newLine {
         results.forEach { print($0) }
