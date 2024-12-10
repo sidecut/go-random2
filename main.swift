@@ -4,7 +4,7 @@ import Foundation
 struct CommandLineOptions {
     var n: Int = 0
     var coin: Bool = false
-    var `repeat`: UInt = 1
+    var repeatCount: UInt = 1
     var repeatSet: Bool = false
     var lines: Bool = false
     var tokens: Bool = false
@@ -38,7 +38,7 @@ func parseArguments() -> CommandLineOptions {
             options.tokens = true
         case "-r":
             if index + 1 < arguments.count, let value = UInt(arguments[index + 1]) {
-                options.repeat = value
+                options.repeatCount = value
                 options.repeatSet = true
                 index += 1
             }
@@ -87,7 +87,7 @@ func main() {
     let options = parseArguments()
 
     // Validate options
-    if options.repeat < 1 && !options.shuffle {
+    if options.repeatCount < 1 && !options.shuffle {
         FileHandle.standardError.write("Error: -r argument must be > 0\n".data(using: .utf8)!)
         exit(1)
     }
@@ -99,7 +99,7 @@ func main() {
         var uniqueResults = Set<String>()
         let timeout = Date().addingTimeInterval(1)  // 1 second timeout
 
-        while uniqueResults.count < Int(options.repeat) {
+        while uniqueResults.count < Int(options.repeatCount) {
             if Date() > timeout {
                 FileHandle.standardError.write(
                     "Error: timeout exceeded when generating results.\n".data(using: .utf8)!)
@@ -113,7 +113,7 @@ func main() {
         results = Array(uniqueResults)
         results.shuffle()
     } else {
-        for _ in 0..<options.repeat {
+        for _ in 0..<options.repeatCount {
             results.append(generateValue(options: options))
         }
     }
