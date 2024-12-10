@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:go-random2}",
+      "name": "Debug go-random2",
+      "program": "${workspaceFolder:go-random2}/.build/debug/go-random2",
+      "preLaunchTask": "swift: Build Debug go-random2"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:go-random2}",
+      "name": "Release go-random2",
+      "program": "${workspaceFolder:go-random2}/.build/release/go-random2",
+      "preLaunchTask": "swift: Build Release go-random2"
+    }
+  ]
+}
