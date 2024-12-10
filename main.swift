@@ -63,8 +63,6 @@ func parseArguments() -> CommandLineOptions {
 func generateValue(options: CommandLineOptions) -> Any {
     if options.coin {
         return coins[Int.random(in: 0...1)]
-    } else if options.n > 0 {
-        return Int.random(in: 1...options.n)
     } else if options.lines {
         // Read lines from standard input
         var lines: [String] = []
@@ -79,6 +77,8 @@ func generateValue(options: CommandLineOptions) -> Any {
             tokens.append(contentsOf: line.split(separator: " ").map(String.init))
         }
         return tokens[Int.random(in: 0..<tokens.count)]
+    } else if options.n > 0 {
+        return Int.random(in: 1...options.n)
     }
     return ""
 }
