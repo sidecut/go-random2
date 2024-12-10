@@ -2,7 +2,7 @@ import Foundation
 
 // Command line argument structure
 struct CommandLineOptions {
-    var n: Int = 1
+    var n: Int = 0
     var coin: Bool = false
     var repeatCount: UInt = 1
     var repeatSet: Bool = false
