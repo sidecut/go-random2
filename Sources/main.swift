@@ -80,9 +80,9 @@ struct Random: ParsableCommand {
 
             while uniqueResults.count < Int(`repeat`) {
                 if Date() > timeout {
-                    print(
-                        "Warning: timeout exceeded when generating results. The repeat count may be too high.",
-                        to: .standardError)
+                    let warningMessage =
+                        "Warning: timeout exceeded when generating results. The repeat count may be too high.\n"
+                    FileHandle.standardError.write(Data(warningMessage.utf8))
                     break
                 }
 
