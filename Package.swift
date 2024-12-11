@@ -7,7 +7,7 @@ let package = Package(
     name: "go-random2",
     dependencies: [
         .package(
-            url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
+            url: "https://github.com/apple/swift-argument-parser", exact: "1.3.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
