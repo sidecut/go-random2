@@ -27,7 +27,7 @@ struct Random: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Ensure unique results when using -r")
     var shuffle = false
 
-    @Flag(name: [.customShort("nl"), .long], help: "Print each result on a new line")
+    @Flag(name: [.customLong("nl"), .long], help: "Print each result on a new line")
     var newLine = false
 
     @Flag(name: [.customShort("0"), .long], help: "Print results with null terminator")
