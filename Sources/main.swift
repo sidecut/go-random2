@@ -17,7 +17,7 @@ struct Random: ParsableCommand {
     var coin = false
 
     @Option(name: .shortAndLong, help: "Repeat the operation N times")
-    var `repeat`: UInt = 1
+    var repeatCount: UInt = 1
 
     @Flag(name: .shortAndLong, help: "Read lines from stdin and select one randomly")
     var lines = false
@@ -67,7 +67,7 @@ struct Random: ParsableCommand {
 
     mutating func run() throws {
         // Validate options
-        if `repeat` < 1 && !shuffle {
+        if repeatCount < 1 && !shuffle {
             throw ValidationError("Error: -r argument must be > 0")
         }
 
@@ -78,7 +78,7 @@ struct Random: ParsableCommand {
             var uniqueResults = Set<String>()
             let timeout = Date().addingTimeInterval(1)  // 1 second timeout
 
-            while uniqueResults.count < Int(`repeat`) {
+            while uniqueResults.count < Int(repeatCount) {
                 if Date() > timeout {
                     let warningMessage =
                         "Warning: timeout exceeded when generating results. The repeat count may be too high.\n"
@@ -93,7 +93,7 @@ struct Random: ParsableCommand {
             results = Array(uniqueResults)
             results.shuffle()
         } else {
-            for _ in 0..<`repeat` {
+            for _ in 0..<repeatCount {
                 results.append(generateValue())
             }
         }
