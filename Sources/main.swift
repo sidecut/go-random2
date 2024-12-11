@@ -40,6 +40,10 @@ struct Random: ParsableCommand {
 
     var coins = ["HEADS", "tails"]
 
+    var invalidArgsError: Error {
+        ValidationError("Invalid arguments provided")
+    }
+
     func generateValue() -> Any {
         if coin {
             return coins[Int.random(in: 0...1)]
@@ -62,7 +66,7 @@ struct Random: ParsableCommand {
             guard !tokens.isEmpty else { return "" }
             return tokens[Int.random(in: 0..<tokens.count)]
         }
-        return ""
+        Random.exit(withError: invalidArgsError)
     }
 
     mutating func run() throws {
