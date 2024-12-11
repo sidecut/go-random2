@@ -10,6 +10,14 @@ struct Random: ParsableCommand {
         )
     }
 
+    var tokensEmptyError: Error {
+        ValidationError("No tokens were provided")
+    }
+
+    var linesEmptyError: Error {
+        ValidationError("No lines were provided")
+    }
+
     @Option(name: .shortAndLong, help: "Generate a random number between 1 and N")
     var n: Int?
 
@@ -55,7 +63,7 @@ struct Random: ParsableCommand {
             while let line = readLine() {
                 lines.append(line)
             }
-            guard !lines.isEmpty else { return "" }
+            guard !lines.isEmpty else { Random.exit(withError: linesEmptyError) }
             return lines[Int.random(in: 0..<lines.count)]
         } else if tokens {
             // Read and tokenize input
@@ -63,7 +71,7 @@ struct Random: ParsableCommand {
             while let line = readLine() {
                 tokens.append(contentsOf: line.split(separator: " ").map(String.init))
             }
-            guard !tokens.isEmpty else { return "" }
+            guard !tokens.isEmpty else { Random.exit(withError: tokensEmptyError) }
             return tokens[Int.random(in: 0..<tokens.count)]
         }
         Random.exit(withError: invalidArgsError)
