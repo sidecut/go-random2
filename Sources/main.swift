@@ -38,7 +38,7 @@ struct Random: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Print results with comma separator")
     var delimiter = false
 
-    let coins = ["HEADS", "tails"]
+    var coins = ["HEADS", "tails"]
 
     func generateValue() -> Any {
         if coin {
