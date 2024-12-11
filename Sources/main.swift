@@ -3,10 +3,12 @@ import Foundation
 
 @main
 struct Random: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        commandName: "random",
-        abstract: "Generate random numbers, flip coins, or select random items"
-    )
+    static var configuration: CommandConfiguration {
+        CommandConfiguration(
+            commandName: "random",
+            abstract: "Generate random numbers, flip coins, or select random items"
+        )
+    }
 
     @Option(name: .shortAndLong, help: "Generate a random number between 1 and N")
     var n: Int?
