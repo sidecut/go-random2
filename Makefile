@@ -16,7 +16,7 @@ release:
 
 install: release
 	mkdir -p $(INSTALL_DIR)
-	cp $(BUILD_DIR)/release/$(BIN_NAME) $(INSTALL_DIR)/
+	install -s $(BUILD_DIR)/release/$(BIN_NAME) $(INSTALL_DIR)/
 
 clean:
 	swift package clean
