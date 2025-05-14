@@ -1,7 +1,7 @@
 SWIFT_BUILD_FLAGS_DEBUG = -c debug
 SWIFT_BUILD_FLAGS_RELEASE = -c release
 BUILD_DIR = .build
-BIN_NAME = go-random2
+BIN_NAME = rndutil
 INSTALL_DIR = $(HOME)/.bin
 
 .PHONY: all debug release install clean
