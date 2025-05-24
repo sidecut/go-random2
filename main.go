@@ -137,7 +137,7 @@ func main() {
 			defer cancelFunc()
 
 			// Results cannot repeat
-			resultsKeys := make(map[any]interface{})
+			resultsKeys := make(map[any]any)
 			for len(resultsKeys) < int(repeat) {
 				r := generateFunc()
 				if _, found := resultsKeys[r]; !found {
@@ -160,7 +160,7 @@ func main() {
 		})
 
 	} else {
-		for i := 0; i < int(repeat); i++ {
+		for range int(repeat) {
 			results = append(results, generateFunc())
 		}
 	}
