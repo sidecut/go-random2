@@ -5,7 +5,7 @@ import Foundation
 struct Random: ParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
-            commandName: "random",
+            commandName: "rndutil",
             abstract: "Generate random numbers, flip coins, or select random items"
         )
     }
