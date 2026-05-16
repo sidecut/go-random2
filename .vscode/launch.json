@@ -6,8 +6,9 @@
       "args": [],
       "cwd": "${workspaceFolder:go-random2}",
       "name": "Debug rndutil",
-      "program": "${workspaceFolder:go-random2}/.build/debug/rndutil",
-      "preLaunchTask": "swift: Build Debug rndutil"
+      "preLaunchTask": "swift: Build Debug rndutil",
+      "target": "rndutil",
+      "configuration": "debug"
     },
     {
       "type": "swift",
@@ -15,8 +16,9 @@
       "args": [],
       "cwd": "${workspaceFolder:go-random2}",
       "name": "Release rndutil",
-      "program": "${workspaceFolder:go-random2}/.build/release/rndutil",
-      "preLaunchTask": "swift: Build Release rndutil"
+      "preLaunchTask": "swift: Build Release rndutil",
+      "target": "rndutil",
+      "configuration": "release"
     }
   ]
 }
