@@ -97,28 +97,11 @@ struct Random: ParsableCommand {
         // Generate results
         var results: [GeneratedValue] = []
 
+        for _ in 0..<repeatCount {
+            results.append(try generateValue())
+        }
         if shuffle {
-            var uniqueResults = Set<String>()
-            let timeout = Date().addingTimeInterval(1)  // 1 second timeout
-
-            while uniqueResults.count < Int(repeatCount) {
-                if Date() > timeout {
-                    let warningMessage =
-                        "Warning: timeout exceeded when generating results. The repeat count may be too high.\n"
-                    FileHandle.standardError.write(Data(warningMessage.utf8))
-                    break
-                }
-
-                let value = try generateValue()
-                uniqueResults.insert(value.description)
-            }
-
-            results = uniqueResults.map { .string($0) }
             results.shuffle()
-        } else {
-            for _ in 0..<repeatCount {
-                results.append(try generateValue())
-            }
         }
 
         // Output results
