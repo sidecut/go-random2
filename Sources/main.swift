@@ -75,8 +75,11 @@ struct Random: ParsableCommand {
 
     mutating func run() throws {
         // Validate options
-        if repeatCount < 1 && !shuffle {
-            throw ValidationError("Error: -r argument must be > 0")
+        if repeatCount == 0 && !shuffle {
+            throw ValidationError("Error: repeatCount must be > 0")
+        }
+        if [newLine, zero, delimiter].filter({ $0 }).count > 1 {
+            throw ValidationError("Error: -nl, -0, and delimiter output are mutually exclusive")
         }
 
         // Generate results
@@ -107,14 +110,17 @@ struct Random: ParsableCommand {
         }
 
         // Output results
+        let outputMode: (Any) -> Void
         if newLine {
-            results.forEach { print($0) }
+            outputMode = { print($0) }
         } else if zero {
-            results.forEach { print($0, terminator: "\0") }
+            outputMode = { print($0, terminator: "\0") }
         } else if delimiter {
-            results.forEach { print($0, terminator: ",") }
+            outputMode = { print($0, terminator: ",") }
         } else {
             print(results.map { String(describing: $0) }.joined(separator: " "))
+            return
         }
+        results.forEach(outputMode)
     }
 }
