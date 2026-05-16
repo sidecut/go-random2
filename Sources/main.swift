@@ -122,17 +122,14 @@ struct Random: ParsableCommand {
         }
 
         // Output results
-        let outputMode: (GeneratedValue) -> Void
         if newLine {
-            outputMode = { print($0) }
+            results.forEach { print($0) }
         } else if zero {
-            outputMode = { print($0, terminator: "\0") }
+            results.forEach { print($0, terminator: "\0") }
         } else if delimiter {
-            outputMode = { print($0, terminator: ",") }
+            print(results.map(\.description).joined(separator: ","))
         } else {
             print(results.map(\.description).joined(separator: " "))
-            return
         }
-        results.forEach(outputMode)
     }
 }
