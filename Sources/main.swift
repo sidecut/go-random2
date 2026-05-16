@@ -48,27 +48,39 @@ struct Random: ParsableCommand {
 
     var coins = ["HEADS", "tails"]
 
-    func generateValue() throws -> Any {
+    enum GeneratedValue: CustomStringConvertible {
+        case string(String)
+        case int(Int)
+
+        var description: String {
+            switch self {
+            case let .string(value):
+                return value
+            case let .int(value):
+                return String(value)
+            }
+        }
+    }
+
+    func generateValue() throws -> GeneratedValue {
         if coin {
-            return coins[Int.random(in: 0...1)]
+            return .string(coins[Int.random(in: 0...1)])
         } else if let maxN = n {
-            return Int.random(in: 1...maxN)
+            return .int(Int.random(in: 1...maxN))
         } else if lines {
-            // Read lines from standard input
             var lines: [String] = []
             while let line = readLine() {
                 lines.append(line)
             }
             guard !lines.isEmpty else { throw linesEmptyError }
-            return lines[Int.random(in: 0..<lines.count)]
+            return .string(lines[Int.random(in: 0..<lines.count)])
         } else if tokens {
-            // Read and tokenize input
             var tokens: [String] = []
             while let line = readLine() {
                 tokens.append(contentsOf: line.split(separator: " ").map(String.init))
             }
             guard !tokens.isEmpty else { throw tokensEmptyError }
-            return tokens[Int.random(in: 0..<tokens.count)]
+            return .string(tokens[Int.random(in: 0..<tokens.count)])
         }
         throw ValidationError("Invalid arguments provided")
     }
@@ -83,7 +95,7 @@ struct Random: ParsableCommand {
         }
 
         // Generate results
-        var results: [Any] = []
+        var results: [GeneratedValue] = []
 
         if shuffle {
             var uniqueResults = Set<String>()
@@ -97,11 +109,11 @@ struct Random: ParsableCommand {
                     break
                 }
 
-                let value = String(describing: try generateValue())
-                uniqueResults.insert(value)
+                let value = try generateValue()
+                uniqueResults.insert(value.description)
             }
 
-            results = Array(uniqueResults)
+            results = uniqueResults.map { .string($0) }
             results.shuffle()
         } else {
             for _ in 0..<repeatCount {
@@ -110,7 +122,7 @@ struct Random: ParsableCommand {
         }
 
         // Output results
-        let outputMode: (Any) -> Void
+        let outputMode: (GeneratedValue) -> Void
         if newLine {
             outputMode = { print($0) }
         } else if zero {
@@ -118,7 +130,7 @@ struct Random: ParsableCommand {
         } else if delimiter {
             outputMode = { print($0, terminator: ",") }
         } else {
-            print(results.map { String(describing: $0) }.joined(separator: " "))
+            print(results.map(\.description).joined(separator: " "))
             return
         }
         results.forEach(outputMode)
