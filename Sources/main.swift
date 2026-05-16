@@ -48,11 +48,7 @@ struct Random: ParsableCommand {
 
     var coins = ["HEADS", "tails"]
 
-    var invalidArgsError: Error {
-        ValidationError("Invalid arguments provided")
-    }
-
-    func generateValue() -> Any {
+    func generateValue() throws -> Any {
         if coin {
             return coins[Int.random(in: 0...1)]
         } else if let maxN = n {
@@ -63,7 +59,7 @@ struct Random: ParsableCommand {
             while let line = readLine() {
                 lines.append(line)
             }
-            guard !lines.isEmpty else { Random.exit(withError: linesEmptyError) }
+            guard !lines.isEmpty else { throw linesEmptyError }
             return lines[Int.random(in: 0..<lines.count)]
         } else if tokens {
             // Read and tokenize input
@@ -71,10 +67,10 @@ struct Random: ParsableCommand {
             while let line = readLine() {
                 tokens.append(contentsOf: line.split(separator: " ").map(String.init))
             }
-            guard !tokens.isEmpty else { Random.exit(withError: tokensEmptyError) }
+            guard !tokens.isEmpty else { throw tokensEmptyError }
             return tokens[Int.random(in: 0..<tokens.count)]
         }
-        Random.exit(withError: invalidArgsError)
+        throw ValidationError("Invalid arguments provided")
     }
 
     mutating func run() throws {
@@ -98,7 +94,7 @@ struct Random: ParsableCommand {
                     break
                 }
 
-                let value = String(describing: generateValue())
+                let value = String(describing: try generateValue())
                 uniqueResults.insert(value)
             }
 
@@ -106,7 +102,7 @@ struct Random: ParsableCommand {
             results.shuffle()
         } else {
             for _ in 0..<repeatCount {
-                results.append(generateValue())
+                results.append(try generateValue())
             }
         }
 
