@@ -1,7 +1,6 @@
 import ArgumentParser
 import Foundation
 
-@main
 struct Random: ParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
@@ -117,3 +116,5 @@ struct Random: ParsableCommand {
         }
     }
 }
+
+Random.main()
