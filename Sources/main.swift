@@ -7,7 +7,7 @@ struct Random: ParsableCommand {
         CommandConfiguration(
             commandName: "rndutil",
             abstract: "Generate random numbers, flip coins, or select random items",
-            version: buildVersion
+            version: Build.version
         )
     }
 

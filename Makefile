@@ -11,10 +11,10 @@ VERSION_FILE = Sources/Version.swift
 all: debug
 
 $(VERSION_FILE):
-	echo 'let buildVersion = "$(GIT_VERSION)"' > $(VERSION_FILE)
+	printf 'enum Build {\n    static let version = "$(GIT_VERSION)"\n}\n' > $(VERSION_FILE)
 
 version:
-	echo 'let buildVersion = "$(GIT_VERSION)"' > $(VERSION_FILE)
+	printf 'enum Build {\n    static let version = "$(GIT_VERSION)"\n}\n' > $(VERSION_FILE)
 
 debug: version
 	swift build $(SWIFT_BUILD_FLAGS_DEBUG)
