@@ -3,15 +3,23 @@ SWIFT_BUILD_FLAGS_RELEASE = -c release
 BUILD_DIR = .build
 BIN_NAME = rndutil
 INSTALL_DIR = $(HOME)/.bin
+GIT_VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || echo "unknown")
+VERSION_FILE = Sources/Version.swift
 
-.PHONY: all debug release install clean
+.PHONY: all debug release install clean version
 
 all: debug
 
-debug:
+$(VERSION_FILE):
+	echo 'let buildVersion = "$(GIT_VERSION)"' > $(VERSION_FILE)
+
+version:
+	echo 'let buildVersion = "$(GIT_VERSION)"' > $(VERSION_FILE)
+
+debug: version
 	swift build $(SWIFT_BUILD_FLAGS_DEBUG)
 
-release:
+release: version
 	swift build $(SWIFT_BUILD_FLAGS_RELEASE)
 
 install: release
@@ -21,3 +29,4 @@ install: release
 clean:
 	swift package clean
 	rm -rf $(BUILD_DIR)
+	rm -f $(VERSION_FILE)

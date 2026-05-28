@@ -6,7 +6,8 @@ struct Random: ParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
             commandName: "rndutil",
-            abstract: "Generate random numbers, flip coins, or select random items"
+            abstract: "Generate random numbers, flip coins, or select random items",
+            version: buildVersion
         )
     }
 
@@ -54,9 +55,9 @@ struct Random: ParsableCommand {
 
         var description: String {
             switch self {
-            case let .string(value):
+            case .string(let value):
                 return value
-            case let .int(value):
+            case .int(let value):
                 return String(value)
             }
         }
