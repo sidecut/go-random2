@@ -6,7 +6,8 @@ struct Random: ParsableCommand {
         CommandConfiguration(
             commandName: "rndutil",
             abstract: "Generate random numbers, flip coins, or select random items",
-            version: Build.version
+            version: Build.version,
+            subcommands: [Shuffle.self]
         )
     }
 
@@ -34,7 +35,7 @@ struct Random: ParsableCommand {
         name: .shortAndLong, help: "Read space-separated tokens from stdin and select one randomly")
     var tokens = false
 
-    @Flag(name: .shortAndLong, help: "Ensure unique results when using -r")
+    @Flag(name: .shortAndLong, help: "Shuffle the generated results before printing")
     var shuffle = false
 
     @Flag(name: [.customLong("nl"), .long], help: "Print each result on a new line")
@@ -62,18 +63,23 @@ struct Random: ParsableCommand {
         }
     }
 
+    static func readAllLines() -> [String] {
+        var input: [String] = []
+        while let line = readLine() {
+            input.append(line)
+        }
+        return input
+    }
+
     func generateValue() throws -> GeneratedValue {
         if coin {
             return .string(coins[Int.random(in: 0...1)])
         } else if let maxN = n {
             return .int(Int.random(in: 1...maxN))
         } else if lines {
-            var lines: [String] = []
-            while let line = readLine() {
-                lines.append(line)
-            }
-            guard !lines.isEmpty else { throw linesEmptyError }
-            return .string(lines[Int.random(in: 0..<lines.count)])
+            let input = Self.readAllLines()
+            guard !input.isEmpty else { throw linesEmptyError }
+            return .string(input[Int.random(in: 0..<input.count)])
         } else if tokens {
             var tokens: [String] = []
             while let line = readLine() {
@@ -114,6 +120,22 @@ struct Random: ParsableCommand {
         } else {
             print(results.map(\.description).joined(separator: " "))
         }
+    }
+}
+
+struct Shuffle: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "Read lines from stdin, shuffle them, and write them to stdout"
+    )
+
+    var linesEmptyError: Error {
+        ValidationError("No lines were provided")
+    }
+
+    func run() throws {
+        let input = Random.readAllLines()
+        guard !input.isEmpty else { throw linesEmptyError }
+        print(input.shuffled().joined(separator: "\n"))
     }
 }
 
