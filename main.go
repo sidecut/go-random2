@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"math/rand/v2"
@@ -139,9 +140,7 @@ func main() {
 	if shuffle {
 		var wg sync.WaitGroup
 		ctx, cancelFunc := context.WithTimeout(context.Background(), time.Second)
-		wg.Add(1)
-		go func(ctx context.Context, cancelFunc context.CancelFunc) {
-			defer wg.Done()
+		wg.Go(func() {
 			defer cancelFunc()
 
 			// Results cannot repeat
@@ -154,13 +153,13 @@ func main() {
 				}
 
 				if ctx.Err() != nil {
-					if ctx.Err().Error() == "context deadline exceeded" {
+					if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 						fmt.Fprintln(os.Stderr, "Warning: timeout exceeded when generating results.  The repeat count may be too high.")
 					}
 					break
 				}
 			}
-		}(ctx, cancelFunc)
+		})
 		wg.Wait()
 
 		rand.Shuffle(len(results), func(i, j int) {
@@ -168,7 +167,7 @@ func main() {
 		})
 
 	} else {
-		for range int(repeat) {
+		for range repeat {
 			results = append(results, generateFunc())
 		}
 	}
