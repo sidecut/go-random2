@@ -90,6 +90,10 @@ func main() {
 		for s.Scan() {
 			options = append(options, s.Text())
 		}
+		if err := s.Err(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 		if len(options) == 0 {
 			fmt.Fprintln(os.Stderr, "Warning: no options specified")
 		}
@@ -111,6 +115,10 @@ func main() {
 		for s.Scan() {
 			fields := strings.Fields(s.Text())
 			options = append(options, fields...)
+		}
+		if err := s.Err(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
 		if shuffle {
 			setOrValidateRepeat(options)
